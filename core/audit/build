@@ -1,0 +1,22 @@
+#!/bin/sh -uxe
+
+cp /usr/include/linux/audit.h lib/audit.h
+patch -p1 -i audit-3.0.8-flex-array-workaround.patch
+
+./configure --prefix=/usr --libdir=/usr/lib --enable-systemd=yes --sbindir=/usr/sbin --sysconfdir=/etc --with-libcap-ng=yes
+make
+make DESTDIR="$1" INSTALL="install -p" install
+
+srcdir=$PWD
+cd "$1"
+
+patch -p0 < $srcdir/undo-flex-array.patch
+install -dm700 /var/log/audit
+rm -rf etc/rc.d \
+    etc/sysconfig \
+    usr/lib/audit
+sed -ri 's|/sbin|/usr/sbin|' \
+	etc/audit/*.conf \
+	etc/audit/plugins.d/*.conf
+
+chmod 644 usr/lib/systemd/system/auditd.service
