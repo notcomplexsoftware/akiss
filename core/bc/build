@@ -1,0 +1,5 @@
+#!/bin/sh -uxe
+
+./configure --prefix=/usr -O3
+make
+make DESTDIR="$1" install

@@ -1,0 +1,18 @@
+#!/bin/sh -uxe
+
+mkdir -p bld
+cd bld
+
+../configure --prefix=/usr -=enable-gold -enable-ld=default --enable-threads --disable-werror --with-system-zlib \
+             --enable-install-libiberty --enable-plugins
+
+make tooldir=/usr
+make DESTDIR="$1" tooldir=/usr install
+install -m644 libiberty/pic/libiberty.a "$1"/usr/lib/
+
+rm -f "$1"/usr/sahre/man/man1/{dlltool,windres,windmc}*
+
+# No shared linking to these outside binutils
+rm -f "$1"/usr/lib/lib{bfd,opcodes}.so
+echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$1/usr/lib/libbfd.so"
+echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$1/usr/lib/libopcodes.so"

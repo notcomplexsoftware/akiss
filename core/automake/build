@@ -1,0 +1,5 @@
+#!/bin/sh -uxe
+
+./configure --build=$(uname -m)-pc-linux-gnu --prefix=/usr
+make
+make DESTDIR="$1" install
