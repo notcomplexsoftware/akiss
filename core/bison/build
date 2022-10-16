@@ -1,5 +1,5 @@
 #!/bin/sh -uxe
 
-./configure --prefix=/usr --datadir=/usr/share
+./configure --prefix=/usr --datadir=/usr/share --disable-nls --without-libtextstyle-prefix
 make
 make DESTDIR="$1" install
