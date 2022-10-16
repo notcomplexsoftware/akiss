@@ -1,6 +1,6 @@
 #!/bin/sh -uxe
 
-./configure --prefix=/usr --libdir=/lib
+./configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib
 sed -e -i "s| -shared | $LDFLAGS\O|g" libtool
 make
 make DESTDIR="$1" install

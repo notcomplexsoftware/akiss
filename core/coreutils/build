@@ -1,0 +1,7 @@
+#!/bin/sh -uxe
+
+autoreconf -fiv
+
+./configure --prefix=/usr --with-openssl --with-packager=akiss --enable-no-install-program=groups,hostname,kill,uptime
+make
+make DESTDIR="$1" install

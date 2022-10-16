@@ -3,7 +3,7 @@
 cp /usr/include/linux/audit.h lib/audit.h
 patch -p1 -i audit-3.0.8-flex-array-workaround.patch
 
-./configure --prefix=/usr --libdir=/usr/lib --enable-systemd=yes --sbindir=/usr/sbin --sysconfdir=/etc --with-libcap-ng=yes
+./configure --prefix=/usr --libdir=/usr/lib --enable-systemd=yes --sbindir=/usr/bin --sysconfdir=/etc --with-libcap-ng=yes --libexecdir=/usr/lib/audit
 make
 make DESTDIR="$1" INSTALL="install -p" install
 

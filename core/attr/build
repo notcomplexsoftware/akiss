@@ -1,5 +1,5 @@
 #!/bin/sh -uxe
 
-./configure --prefix=/usr --libdir=/usr/lib --sysconfdir=/etc
+./configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --sysconfdir=/etc
 make
 make DESTDIR="$1" install

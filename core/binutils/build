@@ -4,7 +4,7 @@ mkdir -p bld
 cd bld
 
 ../configure --prefix=/usr -=enable-gold -enable-ld=default --enable-threads --disable-werror --with-system-zlib \
-             --enable-install-libiberty --enable-plugins
+             --enable-install-libiberty --enable-plugins --with-pic --enable-relro
 
 make tooldir=/usr
 make DESTDIR="$1" tooldir=/usr install
