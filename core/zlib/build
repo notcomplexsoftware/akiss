@@ -1,23 +1,10 @@
 #!/bin/sh -uxe
 
-export CFLAGS="$CFLAGS -flto=auto -ffat-lto-objects"
+export CFLAGS="$CFLAGS -fPIC -flto=auto -ffat-lto-objects"
 export CXXFLAGS="$CXXFLAGS -flto=auto -ffat-lto-objects"
 
 ./configure \
 	--prefix=/usr 
 
 make 
-make DESTDIR="$1" install
-
-cd contrib/minizip
-cp Makefile Makefile.orig
-
-autoreconf -iv
-
-./configure \
-    --prefix=/usr \
-    --enable-static=no
-make 
-make DESTDIR="$1" install
-
-rm "$1"/usr/include/minizip/crypt.h
+make install
