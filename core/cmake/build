@@ -7,7 +7,7 @@ if kiss l cmake; then
     cmake -B build -G Ninja                 \
         -D CMAKE_INSTALL_PREFIX=/usr        \
         -D CMAKE_BUILD_TYPE=Release         \
-        -D CMAKE_USE_SYSTEM_CURL=True       \
+        -D CMAKE_USE_SYSTEM_CURL=False      \
         -D CMAKE_USE_SYSTEM_EXPAT=True      \
         -D CMAKE_USE_SYSTEM_LIBARCHIVE=True \
         -D CMAKE_USE_SYSTEM_LIBUV=True      \
