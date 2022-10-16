@@ -1,0 +1,41 @@
+#!/bin/sh -uxe
+
+patch -Np1 -i ncurses-6.3-libs.patch
+patch -Np1 -i ncurses-6.3-pkgconfig.patch
+
+./configure \
+    --prefix=/usr \
+    --enable-widec \
+    --enable-pc-files \
+    --mandir=/usr/share/man \
+    --disable-rpath-hack \
+    --with-cxx-binding \
+    --with-cxx-shared \
+    --with-manpage-format=normal \
+    --with-pkg-config-libdir=/usr/lib/pkgconfig \
+    --with-shared \
+    --with-versioned-syms \
+    --with-term-kbs=del \
+    --without-ada \
+
+make 
+make DESTDIR="$1" install
+
+
+# fool packages looking to link to non-wide-character ncurses libraries
+for lib in ncurses ncurses++ form panel menu; do
+    printf "INPUT(-l%sw)\n" "${lib}" > "$1/usr/lib/lib${lib}.so"
+    ln -sv ${lib}w.pc "$1/usr/lib/pkgconfig/${lib}.pc"
+done
+
+# some packages look for -lcurses during build
+printf 'INPUT(-lncursesw)\n' > "$1/usr/lib/libcursesw.so"
+ln -sv libncurses.so "$1/usr/lib/libcurses.so"
+
+# tic and ticinfo functionality is built in by default
+# make sure that anything linking against it links against libncursesw.so instead
+for lib in tic tinfo; do
+    printf "INPUT(libncursesw.so.%s)\n" "${2:0:1}" > "$1/usr/lib/lib${lib}.so"
+    ln -sv libncursesw.so.${2:0:1} "$1/usr/lib/lib${lib}.so.${2:0:1}"
+    ln -sv ncursesw.pc "$1/usr/lib/pkgconfig/${lib}.pc"
+done
