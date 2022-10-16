@@ -1,10 +1,14 @@
-#!/bin/sh -uxe
-export DESTDIR="$1"
+#!/bin/sh -e
 
-cmake -B build -G Ninja \
-    -D CMAKE_INSTALL_PREFIX=/usr \
-    -D CMAKE_BUILD_TYPE='None' \
-    -Wno-dev
+./configure \
+    --prefix=/usr \
+    --without-xmlwf \
+    --without-examples \
+    --without-tests \
+    --without-docbook
 
-ninja -C build
-ninja -C build install
+make
+make install
+
+# Remove documentation (Changelogs, etc).
+rm -rf "${1:?}/usr/share"
